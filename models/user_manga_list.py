@@ -32,3 +32,7 @@ class User_Manga_List(db.model):
         db.session.commit()
         return self
     
+    @classmethod
+    def find_all(cls):
+        user_manga_lists = User_Manga_List.query.all()
+        return [u.json() for u in user_manga_lists]
