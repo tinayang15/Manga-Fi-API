@@ -26,3 +26,9 @@ class User_Manga_List(db.model):
                 "user_id": self.user_id,
                 "manga_id": self.manga_id,
                 "favorite_list": self.favorite_list}
+    
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
+    
