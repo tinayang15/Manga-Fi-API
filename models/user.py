@@ -13,3 +13,4 @@ class User(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(
     ), nullable=False, onupdate=datetime.now())
     comments = db.relationship("Comment", cascade="all", back_populates="user")
+    user_manga_lists = db.relationship("User_Manga_List", cascade="all", back_populates="user")
