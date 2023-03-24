@@ -64,7 +64,12 @@ class User_Manga_List(db.model):
         user_manga_list.favorite_list = data['favorite_list']
         db.session.commit()
         return user_manga_list.json()
-
-
+    
+    #Delete Method
+    def delete(cls, id):
+        user_manga_list = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        db.session.delete(user_manga_list)
+        db.session.commit()
+        return 'Deleted user_manga_list', 204
 
     
