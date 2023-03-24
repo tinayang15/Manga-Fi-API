@@ -56,5 +56,6 @@ class User(db.Model):
         user.email = data [ 'email']
         user.name = data ['name']
         user.password = data['password']
+        user.image = data['image']
         db.session.commit()
         return user.json()
