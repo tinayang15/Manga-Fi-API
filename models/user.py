@@ -37,6 +37,10 @@ class User(db.Model):
         db.session.commit()
         return self
     
+    @classmethod
+    def find_all(cls):
+        return User.query.all()
+    
     #Get User By Id
     @classmethod
     def find_by_id(cls, id):
