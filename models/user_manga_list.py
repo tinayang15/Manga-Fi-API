@@ -1,5 +1,6 @@
 from datetime import datetime
 from models.db import db
+from flask import request
 
 class User_Manga_List(db.model):
     __tablename__ = 'user_manga_lists'
@@ -32,6 +33,7 @@ class User_Manga_List(db.model):
         db.session.commit()
         return self
     
+    #FIND Methods
     @classmethod
     def find_all(cls):
         user_manga_lists = User_Manga_List.query.all()
@@ -52,3 +54,17 @@ class User_Manga_List(db.model):
     @classmethod
     def find_by_user_id_manga_id(cls, user_id, manga_id):
         return db.get_or_404(cls, user_id, manga_id, description = f'record with user_id: {user_id} and manga_id: {manga_id} is not available')
+    
+    #UPDATE Methods
+    def update(cls, id):
+        user_manga_list = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        data = request.get_json()
+        user_manga_list.user_id = data['user_id']
+        user_manga_list.manga_id = data['manga_id']
+        user_manga_list.favorite_list = data['favorite_list']
+        db.session.commit()
+        return user_manga_list.json()
+
+
+
+    
