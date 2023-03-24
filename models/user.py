@@ -35,3 +35,9 @@ class User(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+    
+    #Get User By Id
+    @classmethod
+    def find_by_id(cls, id):
+        return db.get_or_404(cls, id, description = f'Record with id: {id} is not available')
+    
