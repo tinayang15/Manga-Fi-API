@@ -41,3 +41,8 @@ class User(db.Model):
     def find_by_id(cls, id):
         return db.get_or_404(cls, id, description = f'Record with id: {id} is not available')
     
+    def delete(cls, id):
+        user = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        db.session.delete(user)
+        db.session.commit()
+        return '', 204
