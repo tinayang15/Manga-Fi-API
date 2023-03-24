@@ -12,4 +12,4 @@ class User(db.Model):
         datetime.utcnow()), nullable=False)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(
     ), nullable=False, onupdate=datetime.now())
-    doctors = db.relationship("Doctor", cascade="all", back_populates="patient")
+    comments = db.relationship("Comment", cascade="all", back_populates="user")
