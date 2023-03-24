@@ -29,3 +29,9 @@ class User(db.Model):
                 "password": self.password,
                 "created_at": str(self.created_at),
                 "updated_at": str(self.updated_at)}
+    
+    #Create
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
