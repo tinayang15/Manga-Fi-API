@@ -21,3 +21,11 @@ class User(db.Model):
         self.email = email
         self.password = password
         self.image = image
+
+    def json(self):
+        return {"id": self.id,
+                "name": self.name,
+                "email": self.email,
+                "password": self.password,
+                "created_at": str(self.created_at),
+                "updated_at": str(self.updated_at)}
