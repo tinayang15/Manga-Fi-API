@@ -20,3 +20,9 @@ class User_Manga_List(db.model):
         self.user_id = user_id
         self.manga_id = manga_id
         self.favorite_list = favorite_list
+
+    def json(self):
+        return {"id": self.id,
+                "user_id": self.user_id,
+                "manga_id": self.manga_id,
+                "favorite_list": self.favorite_list}
