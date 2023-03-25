@@ -8,3 +8,9 @@ class Users(Resource):
     def get(self):
         users = User.find_all()
         return [u.json() for u in users]
+    
+    def post(self):
+        data = request.get_json()
+        user = User(**data)
+        user.create()
+        return user.json(), 201
