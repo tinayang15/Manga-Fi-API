@@ -22,3 +22,10 @@ class UserDetail(Resource):
         comments = [t.json() for t in user.comments]
         return {**user.json(), 'comments': comments}
     
+    def put(self, user_id):
+        data = request.get_json()
+        user = User.find_by_id(user_id)
+        for k in data.keys():
+            user[k] = data[k]
+            db.session.commit()
+            return user.json()
