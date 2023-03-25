@@ -1,8 +1,8 @@
 """user_manga_comment
 
-Revision ID: 4770691ca697
+Revision ID: e111484d38ee
 Revises: 
-Create Date: 2023-03-25 14:36:53.560632
+Create Date: 2023-03-25 15:32:21.542058
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '4770691ca697'
+revision = 'e111484d38ee'
 down_revision = None
 branch_labels = None
 depends_on = None
