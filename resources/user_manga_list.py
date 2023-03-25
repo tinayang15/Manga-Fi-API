@@ -42,17 +42,20 @@ class User_Manga_List_Detail(Resource):
         if not user_manga_list:
             return {'msg': 'user_manga_list not found'}, 404
         return user_manga_list.json(), 200
-    
-    
-    
 
     def put(self, user_manga_list_id):
         data = request.get_json()
         user_manga_list = User_Manga_List.find_by_id(user_manga_list_id)
-        for k in data.keys():
-            user_manga_list[k]=data[k]
-            db.session.commit()
-            return user_manga_list.json()
+        if not user_manga_list:
+            return{'msg': 'user_manga_list not found'}, 404
+        user_id = data.get('user_id')
+        manga_id = data.get('manga_id')
+        if user_id:
+            user_manga_list.user_id = user_id
+        if manga_id:
+            user_manga_list.manga_id=manga_id
+        db.session.commit()
+        return user_manga_list.json()
         
     def delete(self, user_manga_list_id):
         user_manga_list = User_Manga_List.find_by_id(user_manga_list_id)
