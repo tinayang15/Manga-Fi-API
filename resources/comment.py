@@ -48,10 +48,16 @@ class CommentDetail(Resource):
     def put(self, comment_id):
         data = request.get_json()
         comment = Comment.find_by_id(comment_id)
-        for k in data.keys():
-            comment[k]=data[k]
-            db.session.commit()
-            return comment.json()
+        if not comment:
+            return{'msg': 'comment not found'}, 404
+        user_id = data.get('user_id')
+        manga_id = data.get('manga_id')
+        if user_id:
+            comment.user_id = user_id
+        if manga_id:
+            comment.manga_id=manga_id
+        db.session.commit()
+        return comment.json()
     
     def delete(self, comment_id):
         comment = Comment.find_by_id(comment_id)
