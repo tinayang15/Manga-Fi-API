@@ -28,3 +28,11 @@ class CommentDetail(Resource):
             comment[k]=data[k]
             db.session.commit()
             return comment.json()
+    
+    def delete(self, comment_id):
+        comment = Comment.find_by_id(comment_id)
+        if not comment:
+            return {'msg': 'comment not found'}, 404
+        db.session.delete(comment)
+        db.session.commit()
+        return {"msg": "comment deleted", "payload": comment_id}
