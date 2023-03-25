@@ -17,4 +17,14 @@ class Comments(Resource):
         comment.create()
         return comment.json(), 201
     
-    
+class CommentDetail(Resource):
+    def get(self, comment_id):
+        pass
+
+    def put(self, comment_id):
+        data = request.get_json()
+        comment = Comment.find_by_id(comment_id)
+        for k in data.keys():
+            comment[k]=data[k]
+            db.session.commit()
+            return comment.json()

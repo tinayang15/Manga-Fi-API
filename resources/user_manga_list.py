@@ -18,7 +18,7 @@ class User_Manga_Lists(Resource):
         return user_manga_list.json(), 201
     
 
-class User_Manga_List_Details(Resource):
+class User_Manga_List_Detail(Resource):
     def get(self, user_manga_list_id):
         pass
 
