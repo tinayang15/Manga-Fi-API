@@ -24,6 +24,11 @@ class UserMangaListByUserId:
             return {'msg': 'user_manga_list not found'}, 404
         return user_manga_list.json(), 200
 class UserMangaListByMangaId:
+    def get(self, manga_id):
+        user_manga_list = User_Manga_List.find_by_id(manga_id)
+        if not user_manga_list:
+            return {'msg': 'user_manga_list not found'}, 404
+        return user_manga_list.json(), 200
 class UserMangaListByUserIdMangaId:
 
 class User_Manga_List_Detail(Resource):
@@ -33,11 +38,6 @@ class User_Manga_List_Detail(Resource):
             return {'msg': 'user_manga_list not found'}, 404
         return user_manga_list.json(), 200
     
-    def get(self, manga_id):
-        user_manga_list = User_Manga_List.find_by_id(manga_id)
-        if not user_manga_list:
-            return {'msg': 'user_manga_list not found'}, 404
-        return user_manga_list.json(), 200
     
     
     def get(self, user_id, manga_id):
