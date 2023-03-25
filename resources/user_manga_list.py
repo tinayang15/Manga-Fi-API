@@ -18,7 +18,7 @@ class User_Manga_Lists(Resource):
         return user_manga_list.json(), 201
     
 
-class User_Manga_Lists_Details(Resource):
+class User_Manga_List_Details(Resource):
     def get(self, user_manga_list_id):
         pass
 
@@ -29,4 +29,11 @@ class User_Manga_Lists_Details(Resource):
             user_manga_list[k]=data[k]
             db.session.commit()
             return user_manga_list.json()
-
+        
+    def delete(self, user_manga_list_id):
+        user_manga_list = User_Manga_List.find_by_id(user_manga_list_id)
+        if not user_manga_list:
+            return {'msg': 'user_manga_list not found'}, 404
+        db.session.delete(user_manga_list)
+        db.session.commit()
+        return {"msg": "user_manga_list deleted", "payload": user_manga_list_id}
