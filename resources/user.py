@@ -24,7 +24,7 @@ class UserDetail(Resource):
     
     def get(self, user_id):
         user = User.query.options(joinedload('user_manga_lists')).filter_by(id=user_id).first()
-        user_manga_lists = [t.json() for t in user.user_manga_lists]
+        user_manga_lists = [z.json() for z in user.user_manga_lists]
         return {**user.json(), 'user_manga_lists': user_manga_lists}
     
     def put(self, user_id):
