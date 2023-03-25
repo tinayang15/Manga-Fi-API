@@ -19,7 +19,10 @@ class Comments(Resource):
     
 class CommentDetail(Resource):
     def get(self, comment_id):
-        pass
+        comment = Comment.find_by_id(comment_id)
+        if not comment:
+            return {'msg': 'comment not found'}, 404
+        return comment.json(), 200
 
     def put(self, comment_id):
         data = request.get_json()
