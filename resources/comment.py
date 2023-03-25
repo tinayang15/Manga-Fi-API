@@ -23,25 +23,24 @@ class CommentByUserId:
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
+    
 class CommentByMangaId:
     def get(self, manga_id):
         comment = Comment.find_by_id(manga_id)
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
-class CommentByUserMangaId:
+    
+class CommentByUserIdMangaId:
+    def get(self, user_id, manga_id):
+        comment = Comment.find_by_id(user_id, manga_id)
+        if not comment:
+            return {'msg': 'comment not found'}, 404
+        return comment.json(), 200
 
 class CommentDetail(Resource):
     def get(self, comment_id):
         comment = Comment.find_by_id(comment_id)
-        if not comment:
-            return {'msg': 'comment not found'}, 404
-        return comment.json(), 200
-    
-    
-    
-    def get(self, user_id, manga_id):
-        comment = Comment.find_by_id(user_id, manga_id)
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
