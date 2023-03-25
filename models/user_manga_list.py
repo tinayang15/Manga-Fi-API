@@ -45,7 +45,8 @@ class User_Manga_List(db.Model):
     
     @classmethod
     def find_by_manga_id(cls, manga_id):
-        return db.get_or_404(cls, manga_id, description = f'record with manga_id: {manga_id} is not available')
+        user_manga_lists = cls.query.filter_by(manga_id=manga_id).all()
+        return user_manga_lists
     
         # def find_all_by_user_id(cls, user_id):
         # return cls.query.filter_by(user_id=user_id).all()

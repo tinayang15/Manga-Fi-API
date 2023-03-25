@@ -29,7 +29,7 @@ class UserMangaListByMangaId(Resource):
         user_manga_list = User_Manga_List.find_by_manga_id(manga_id)
         if not user_manga_list:
             return {'msg': 'user_manga_list not found'}, 404
-        return user_manga_list.json(), 200
+        return [um.json() for um in user_manga_list], 200
     
 class UserMangaListByUserIdMangaId(Resource):
     def get(self, user_id, manga_id):
