@@ -31,4 +31,4 @@ api.add_resource(comment.CommentByMangaId, '/comments/manga/<int:manga_id>')
 api.add_resource(comment.CommentByUserIdMangaId, '/comments/user/<int:user_id>/manga/<int:manga_id>')
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
