@@ -18,6 +18,7 @@ db.init_app(app)
 migrate = Migrate(app,db)
 
 api.add_resource(user.Users, '/users')
+api.add_resource(user.UserDetail, '/users/<int:patient_id>')
 
 if __name__ == '__main__':
     app.run()
