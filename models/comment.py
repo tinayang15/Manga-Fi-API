@@ -56,3 +56,10 @@ class Comment(db.Model):
         comment.content = data['content']
         db.session.commit()
         return comment.json()
+    
+    #Delete Method
+    def delete(cls, id):
+        comment = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        db.session.delete(comment)
+        db.session.commit()
+        return 'Deleted comment', 204
