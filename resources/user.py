@@ -29,3 +29,11 @@ class UserDetail(Resource):
             user[k] = data[k]
             db.session.commit()
             return user.json()
+        
+    def delete(self, user_id):
+        user = User.find_by_id(user_id)
+        if not user:
+            return {"msg": "user not found"}, 404
+        db.session.delete(user)
+        db.session.commit()
+        return {"msg": "user Deleted", "payload": user_id}
