@@ -16,3 +16,17 @@ class User_Manga_Lists(Resource):
         user_manga_list = User_Manga_List(**params)
         user_manga_list.create()
         return user_manga_list.json(), 201
+    
+
+class User_Manga_Lists_Details(Resource):
+    def get(self, user_manga_list_id):
+        pass
+
+    def put(self, user_manga_list_id):
+        data = request.get_json()
+        user_manga_list = User_Manga_List.find_by_id(user_manga_list_id)
+        for k in data.keys():
+            user_manga_list[k]=data[k]
+            db.session.commit()
+            return user_manga_list.json()
+
