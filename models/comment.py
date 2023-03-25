@@ -15,7 +15,13 @@ class Comment(db.Model):
     ), nullable=False, onupdate=datetime.utcnow)
     user = db.relationship("User", back_populates="comments")
 
-    def __init__(self, user_id, manga_id, comment):
+    def __init__(self, user_id, manga_id, content):
         self.user_id = user_id
         self.manga_id = manga_id
-        self.comment = comment
+        self.content = content
+
+    def json(self):
+        return {"id": self.id,
+                "user_id": self.user_id,
+                "manga_id": self.manga_id,
+                "content": self.content}
