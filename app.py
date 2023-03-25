@@ -22,6 +22,7 @@ api.add_resource(user.UserDetail, '/users/<int:user_id>')
 api.add_resource(user_manga_list.User_Manga_List, '/user_manga_lists')
 api.add_resource(user_manga_list.User_Manga_List_Detail, '/user_manga_lists/<int:user_manga_list_id>')
 api.add_resource(user_manga_list.User_Manga_List_Detail, '/user_manga_lists/user/<int:user_id>')
+api.add_resource(user_manga_list.User_Manga_List_Detail, '/user_manga_lists/manga/<int:manga_id>')
 
 if __name__ == '__main__':
     app.run()
