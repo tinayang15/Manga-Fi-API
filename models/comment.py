@@ -46,3 +46,13 @@ class Comment(db.Model):
     @classmethod
     def find_by_user_id_manga_id(cls, user_id, manga_id):
         return db.get_or_404(cls, user_id, manga_id, description = f'record with user_id: {user_id} and manga_id: {manga_id} is not available')
+    
+    #UPDATE Methods
+    def update(cls, id):
+        comment = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        data = request.get_json()
+        comment.user_id = data['user_id']
+        comment.manga_id = data['manga_id']
+        comment.content = data['content']
+        db.session.commit()
+        return comment.json()
