@@ -17,21 +17,21 @@ class Comments(Resource):
         comment.create()
         return comment.json(), 201
 
-class CommentByUserId:
+class CommentByUserId(Resource):
     def get(self, user_id):
         comment = Comment.find_by_id(user_id)
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
     
-class CommentByMangaId:
+class CommentByMangaId(Resource):
     def get(self, manga_id):
         comment = Comment.find_by_id(manga_id)
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
     
-class CommentByUserIdMangaId:
+class CommentByUserIdMangaId(Resource):
     def get(self, user_id, manga_id):
         comment = Comment.find_by_id(user_id, manga_id)
         if not comment:
