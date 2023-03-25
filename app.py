@@ -19,6 +19,7 @@ migrate = Migrate(app,db)
 
 api.add_resource(user.Users, '/users')
 api.add_resource(user.UserDetail, '/users/<int:user_id>')
+api.add_resource(user_manga_list.User_Manga_List, '/user_manga_lists')
 
 if __name__ == '__main__':
     app.run()
