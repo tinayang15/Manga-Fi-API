@@ -17,6 +17,7 @@ app.config['SQLALCHEMY_ECHO'] = True
 db.init_app(app)
 migrate = Migrate(app,db)
 
+api.add_resource(user.Users, '/users')
 
 if __name__ == '__main__':
     app.run()
