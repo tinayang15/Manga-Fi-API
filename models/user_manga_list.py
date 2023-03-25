@@ -2,15 +2,15 @@ from datetime import datetime
 from models.db import db
 from flask import request
 
-class User_Manga_List(db.model):
+class User_Manga_List(db.Model):
     __tablename__ = 'user_manga_lists'
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id', nullable=False))
+    user_id=db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     manga_id=db.Column(db.Integer
                     #    , db.ForeignKey('manga.id', nullable=False)
                     )
-    favorite_list=db.Column(db.Array)
+    favorite_list=db.Column(db.ARRAY(db.String))
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(
     ), nullable=False, onupdate=datetime.utcnow)

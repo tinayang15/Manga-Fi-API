@@ -5,7 +5,7 @@ from flask import request
 class Comment(db.Model):
     __tablename__='comments'
     id = db.Column(db.Integer, primary_key=True)
-    user_id=db.Column(db.Integer, db.ForeignKey('user.id', nullable=False))
+    user_id=db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     manga_id=db.Column(db.Integer
                     #    , db.ForeignKey('manga.id', nullable=False)
                     )
