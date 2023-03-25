@@ -25,3 +25,8 @@ class Comment(db.Model):
                 "user_id": self.user_id,
                 "manga_id": self.manga_id,
                 "content": self.content}
+    
+    def create(self):
+        db.session.add(self)
+        db.session.commit()
+        return self
