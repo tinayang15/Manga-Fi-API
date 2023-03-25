@@ -30,3 +30,19 @@ class Comment(db.Model):
         db.session.add(self)
         db.session.commit()
         return self
+    
+    #Find Methods
+    def find_by_id(cls, id):
+        return db.get_or_404(cls, id, description = f'record with id: {id} is not available')
+    
+    @classmethod
+    def find_by_manga_id(cls, manga_id):
+        return db.get_or_404(cls, manga_id, description = f'record with manga_id: {manga_id} is not available')
+    
+    @classmethod
+    def find_by_user_id(cls, user_id):
+        return db.get_or_404(cls, user_id, description = f'record with user_id: {user_id} is not available')
+    
+    @classmethod
+    def find_by_user_id_manga_id(cls, user_id, manga_id):
+        return db.get_or_404(cls, user_id, manga_id, description = f'record with user_id: {user_id} and manga_id: {manga_id} is not available')
