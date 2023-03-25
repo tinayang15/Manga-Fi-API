@@ -22,6 +22,11 @@ class UserDetail(Resource):
         comments = [t.json() for t in user.comments]
         return {**user.json(), 'comments': comments}
     
+    def get(self, user_id):
+        user = User.query.options(joinedload('user_manga_lists')).filter_by(id=user_id).first()
+        user_manga_lists = [t.json() for t in user.user_manga_lists]
+        return {**user.json(), 'user_manga_lists': user_manga_lists}
+    
     def put(self, user_id):
         data = request.get_json()
         user = User.find_by_id(user_id)
