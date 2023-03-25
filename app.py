@@ -28,6 +28,7 @@ api.add_resource(comment.Comments, '/comments')
 api.add_resource(comment.CommentDetail, '/comments/<int:comment_id>')
 api.add_resource(comment.CommentDetail, '/comments/user/<int:user_id>')
 api.add_resource(comment.CommentDetail, '/comments/manga/<int:manga_id>')
+api.add_resource(comment.CommentDetail, '/comments/user/<int:user_id>/manga/<int:manga_id>')
 
 if __name__ == '__main__':
     app.run()
