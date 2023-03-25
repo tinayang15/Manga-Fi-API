@@ -14,3 +14,8 @@ class Comment(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.utcnow(
     ), nullable=False, onupdate=datetime.utcnow)
     user = db.relationship("User", back_populates="comments")
+
+    def __init__(self, user_id, manga_id, comment):
+        self.user_id = user_id
+        self.manga_id = manga_id
+        self.comment = comment
