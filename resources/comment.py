@@ -23,6 +23,12 @@ class CommentDetail(Resource):
         if not comment:
             return {'msg': 'comment not found'}, 404
         return comment.json(), 200
+    
+    def get(self, manga_id):
+        comment = Comment.find_by_id(manga_id)
+        if not comment:
+            return {'msg': 'comment not found'}, 404
+        return comment.json(), 200
 
     def put(self, comment_id):
         data = request.get_json()
