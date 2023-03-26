@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Mangas</title>
+</head>
+
+<body>
+    <div>
+        {% block content%}
+        {% for manga in mangas}
+        <div id="manga"></div>
+        {% endfor %}
+        {% endblock %}
+    </div>
+</body>
+
+</html>
