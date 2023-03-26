@@ -78,6 +78,15 @@ class User_Manga_List(db.Model):
         # user_manga_list.favorite_list = data['favorite_list']
         # db.session.commit()
         # return user_manga_list.json()
+    def update_with_user_manga_id(cls, user_id, manga_id, favorite_list):
+        user_manga_list = cls.query.filter_by(user_id=user_id, manga_id=manga_id).first()
+        if user_manga_list:
+            user_manga_list.favorite_list = favorite_list
+            user_manga_list.updated_at = datetime.utcnow()
+            db.session.commit()
+            return user_manga_list.json()
+        else:
+            return {'msg': 'comment not found'}, 404
     
     #Delete Method
     def delete(cls, id):

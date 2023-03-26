@@ -2,6 +2,7 @@ from models.db import db
 from models.comment import Comment
 from flask_restful import Resource
 from flask import request
+from datetime import datetime
 
 class Comments(Resource):
     def get(self):
@@ -37,6 +38,18 @@ class CommentByUserIdMangaId(Resource):
         if not comments:
             return {'msg': 'user_manga_list not found'}, 404
         return [c.json() for c in comments], 200
+    
+    def put(self, user_id, manga_id):
+        data = request.get_json()
+        comment = Comment.find_by_user_id_manga_id(user_id, manga_id)
+        if not comment:
+            return{'msg': 'comment not found'}, 404
+        content = data.get('content')
+        if content:
+            comment.content = content
+            comment.updated_at = datetime.utcnow()
+            db.session.commit()
+        return comment.json()
 
 class CommentDetail(Resource):
     def get(self, comment_id):
@@ -52,10 +65,13 @@ class CommentDetail(Resource):
             return{'msg': 'comment not found'}, 404
         user_id = data.get('user_id')
         manga_id = data.get('manga_id')
+        content=data.get('content')
         if user_id:
             comment.user_id = user_id
         if manga_id:
             comment.manga_id=manga_id
+        if content:
+            comment.content=content
         db.session.commit()
         return comment.json()
     

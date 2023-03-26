@@ -2,6 +2,7 @@ from models.db import db
 from models.user_manga_list import User_Manga_List
 from flask_restful import Resource
 from flask import request
+from datetime import datetime
 
 class User_Manga_Lists(Resource):
     def get(self):
@@ -37,6 +38,18 @@ class UserMangaListByUserIdMangaId(Resource):
         if not user_manga_lists:
             return {'msg': 'user_manga_list not found'}, 404
         return [um.json() for um in user_manga_lists], 200
+    
+    def put(self, user_id, manga_id):
+        data = request.get_json()
+        user_manga_list = User_Manga_List.find_by_user_id_manga_id(user_id, manga_id)
+        if not user_manga_list:
+            return{'msg': 'user_manga_list not found'}, 404
+        favorite_list = data.get('favorite_list')
+        if favorite_list:
+            user_manga_list.favorite_list = favorite_list
+            user_manga_list.updated_at = datetime.utcnow()
+            db.session.commit()
+        return user_manga_list.json()
 
 class User_Manga_List_Detail(Resource):
     def get(self, user_manga_list_id):

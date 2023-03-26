@@ -63,8 +63,19 @@ class Comment(db.Model):
         comment.user_id = data['user_id']
         comment.manga_id = data['manga_id']
         comment.content = data['content']
+        comment.updated_at = datetime.utcnow()
         db.session.commit()
         return comment.json()
+    
+    def update_with_user_manga_id(cls, user_id, manga_id, content):
+        comment = cls.query.filter_by(user_id=user_id, manga_id=manga_id).first()
+        if comment:
+            comment.content = content
+            comment.updated_at = datetime.utcnow()
+            db.session.commit()
+            return comment.json()
+        else:
+            return {'msg': 'comment not found'}, 404
     
     #Delete Method
     def delete(cls, id):
