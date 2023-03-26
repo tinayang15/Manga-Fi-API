@@ -62,14 +62,22 @@ class User_Manga_List(db.Model):
         return user_manga_lists
     
     #UPDATE Methods
-    def update(cls, id):
-        user_manga_list = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+    def update(self):
         data = request.get_json()
-        user_manga_list.user_id = data['user_id']
-        user_manga_list.manga_id = data['manga_id']
-        user_manga_list.favorite_list = data['favorite_list']
+        self.user_id = data.get('user_id', self.user_id)
+        self.manga_id = data.get('manga_id', self.manga_id)
+        self.favorite_list = data.get('favorite_list', self.favorite_list)
+        self.updated_at = datetime.utcnow()
         db.session.commit()
-        return user_manga_list.json()
+        return self.json()
+    # def update(cls, id):
+        # user_manga_list = db.get_or_404(cls, id, description = f'Record with id:{id} is not available')
+        # data = request.get_json()
+        # user_manga_list.user_id = data['user_id']
+        # user_manga_list.manga_id = data['manga_id']
+        # user_manga_list.favorite_list = data['favorite_list']
+        # db.session.commit()
+        # return user_manga_list.json()
     
     #Delete Method
     def delete(cls, id):

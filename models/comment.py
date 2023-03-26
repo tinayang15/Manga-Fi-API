@@ -32,10 +32,12 @@ class Comment(db.Model):
         return self
     
     #Find Methods
+    @classmethod
     def find_all(cls):
         comments = Comment.query.all()
         return [c.json() for c in comments]
     
+    @classmethod
     def find_by_id(cls, id):
         return db.get_or_404(cls, id, description = f'record with id: {id} is not available')
     

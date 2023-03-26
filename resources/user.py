@@ -30,9 +30,10 @@ class UserDetail(Resource):
         data = request.get_json()
         user = User.find_by_id(user_id)
         for k in data.keys():
-            user[k] = data[k]
-            db.session.commit()
-            return user.json()
+            setattr(user, k, data[k])
+            #how come when it was user[kdata[k] - I was getting an error of TypeError: 'User' object does not support item assignment, 
+        db.session.commit()
+        return user.json()
         
     def delete(self, user_id):
         user = User.find_by_id(user_id)

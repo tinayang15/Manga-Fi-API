@@ -52,10 +52,13 @@ class User_Manga_List_Detail(Resource):
             return{'msg': 'user_manga_list not found'}, 404
         user_id = data.get('user_id')
         manga_id = data.get('manga_id')
+        favorite_list = data.get('favorite_list')
         if user_id:
             user_manga_list.user_id = user_id
         if manga_id:
             user_manga_list.manga_id=manga_id
+        if favorite_list:
+            user_manga_list.favorite_list=favorite_list
         db.session.commit()
         return user_manga_list.json()
         
