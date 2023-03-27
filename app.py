@@ -47,10 +47,19 @@ def get_mangas():
     # print(dict.keys())
     # print(dict["results"])
     for manga in dict["data"]:
+        try:
+            descriptionEnglish = manga["attributes"]["description"]["en"]
+        except KeyError:
+            descriptionEnglish = "No English Description Available"
+        id = manga ["id"]
         title = manga["attributes"]["title"]["en"]
-        descriptionEnglish = manga["attributes"]["description"]["en"]
+        # descriptionEnglish = manga["attributes"]["description"]["en"]
         # descriptionKorean = manga["attributes"]["description"]["ko"]
-        linkToRaw = manga["attributes"]["links"]["raw"]
+        # linkToRaw = manga["attributes"]["links"]["raw"]
+        try:
+            linkToRaw = manga["attributes"]["links"]["raw"]
+        except KeyError:
+            linkToRaw = "No Raw Links Found"
         publicationDemographic = manga["attributes"]["publicationDemographic"]
         status = manga["attributes"]["status"]
         year = manga["attributes"]["year"]
@@ -62,12 +71,73 @@ def get_mangas():
         relationshipId = manga["relationships"][0]["id"]
         relationshipType = manga["relationships"][0]["type"]
 
-        mangas.append({"title": title, "descriptionEnglish":descriptionEnglish, "linkToRaw":linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags":tags, "state":state, "createdAt":createdAt, "updatedAt":updatedAt, "relationships":relationships, "relationshipId":relationshipId, "relationshipType": relationshipType})
+        mangas.append({"id": id, "title": title, "descriptionEnglish":descriptionEnglish, "linkToRaw":linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags":tags, "state":state, "createdAt":createdAt, "updatedAt":updatedAt, "relationships":relationships, "relationshipId":relationshipId, "relationshipType": relationshipType})
         
         # Print the title
         print(title)
 
     return {"data": mangas}
+
+
+@app.route('/manga/<string:manga_id>')
+def get_manga(manga_id):
+    url = f"https://api.mangadex.org/manga/{manga_id}"
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    dict = json.loads(data)
+
+    title = dict["data"]["attributes"]["title"]["en"]
+    description = dict["data"]["attributes"]["description"]["en"]
+    linkToRaw = dict["data"]["attributes"]["links"]["raw"]
+    publicationDemographic = dict["data"]["attributes"]["publicationDemographic"]
+    status = dict["data"]["attributes"]["status"]
+    year = dict["data"]["attributes"]["year"]
+    tags = [tag["attributes"]["name"]["en"] for tag in dict["data"]["attributes"]["tags"]]
+    state = dict["data"]["attributes"]["state"]
+    createdAt = dict["data"]["attributes"]["createdAt"]
+    updatedAt = dict["data"]["attributes"]["updatedAt"]
+    relationships = dict["data"]["relationships"]
+    relationshipId = dict["data"]["relationships"][0]["id"]
+    relationshipType = dict["data"]["relationships"][0]["type"]
+
+    manga = {"id": manga_id, "title": title, "description": description, "linkToRaw": linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags": tags, "state": state, "createdAt": createdAt, "updatedAt": updatedAt, "relationships": relationships, "relationshipId": relationshipId, "relationshipType": relationshipType}
+
+    return {"data": manga}
+
+@app.route('/manga/<string:manga_id>/chapters')
+def get_chapter(manga_id):
+    url = f"https://api.mangadex.org/manga/{manga_id}/aggregate"
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    manga_data = json.loads(data)
+
+    volumes = manga_data["volumes"]
+    manga = []
+    for volume in volumes.values():
+        volume_number = volume["volume"]
+        for chapter in volume["chapters"].values():
+            chapter_number = chapter["chapter"]
+            chapter_id = chapter["id"]
+            manga.append({"volume": volume_number, "chapter": chapter_number, "id": chapter_id})
+
+    return {"data": manga}
+
+
+@app.route('/manga/chapter/detail/<string:chapter_id>')
+def get_chapter_detail(chapter_id):
+    url = f"GET https://api.mangadex.org/at-home/server/{chapter_id}"
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    manga_data = json.loads(data)
+
+
+
+    return {"data": manga}
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
