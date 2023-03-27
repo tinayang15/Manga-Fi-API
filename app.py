@@ -127,15 +127,21 @@ def get_chapter(manga_id):
 
 @app.route('/manga/chapter/detail/<string:chapter_id>')
 def get_chapter_detail(chapter_id):
-    url = f"GET https://api.mangadex.org/at-home/server/{chapter_id}"
+    url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
 
     response = urllib.request.urlopen(url)
     data = response.read()
-    manga_data = json.loads(data)
+    chapter_data = json.loads(data)
+
+    baseUrl = chapter_data["baseUrl"]
+    hash = chapter_data["chapter"]["hash"]
+    chapterData = chapter_data["chapter"]["data"]
+    dataSaver = chapter_data["chapter"]["dataSaver"]
+
+    chapter={"baseUrl": baseUrl, "hash":hash, "chapterData": chapterData, "dataSaver": dataSaver}
 
 
-
-    return {"data": manga}
+    return {"data": chapter}
 
 
 
