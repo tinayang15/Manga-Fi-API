@@ -160,7 +160,19 @@ def get_chapter_detail(chapter_id):
 
     return {"data": chapter}
 
+@app.route('/manga/author/<string:author_id>')
+def get_author(author_id):
+    url = f"https://api.mangadex.org/author/{author_id}"
 
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    author_data = json.loads(data)
+
+    name = author_data["data"]["attributes"]["name"]
+
+    author={"name": name}
+
+    return {"data": author}
 
 if __name__ == '__main__':
     app.run(debug=True)
