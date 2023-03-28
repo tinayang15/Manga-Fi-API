@@ -97,11 +97,28 @@ def get_manga(manga_id):
     state = dict["data"]["attributes"]["state"]
     createdAt = dict["data"]["attributes"]["createdAt"]
     updatedAt = dict["data"]["attributes"]["updatedAt"]
-    relationships = dict["data"]["relationships"]
+    relationships = []
+    for relationship in dict["data"]["relationships"]:
+        relationship_id = relationship['id']
+        relationship_type = relationship["type"]
+        relationship_dict={'id': relationship_id, "type": relationship_type}
+        relationships.append(relationship_dict) 
+    author_id = ""
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "author":
+            author_id = relationship["id"]
+    cover_art_id = ""
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "cover_art":
+            cover_art_id = relationship["id"]
+    artist_id = ""
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "artist":
+            artist_id = relationship["id"]
     relationshipId = dict["data"]["relationships"][0]["id"]
     relationshipType = dict["data"]["relationships"][0]["type"]
 
-    manga = {"id": manga_id, "title": title, "description": description, "linkToRaw": linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags": tags, "state": state, "createdAt": createdAt, "updatedAt": updatedAt, "relationships": relationships, "relationshipId": relationshipId, "relationshipType": relationshipType}
+    manga = {"id": manga_id, "title": title, "description": description, "linkToRaw": linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags": tags, "state": state, "createdAt": createdAt, "updatedAt": updatedAt, "relationships": relationships, "relationshipId": relationshipId, "relationshipType": relationshipType, "author_id":author_id, "cover_art_id": cover_art_id, "artist_id":artist_id}
 
     return {"data": manga}
 
