@@ -188,5 +188,11 @@ def get_cover(cover_art_id):
 
     return {"data": cover_art}
 
+@app.route('/manga/<string:manga_id>/cover/<string:fileName>')
+def get_manga_cover(fileName, manga_id):
+    url = f"https://uploads.mangadex.org/covers/{manga_id}/{fileName}"
+
+    return url
+
 if __name__ == '__main__':
     app.run(debug=True)
