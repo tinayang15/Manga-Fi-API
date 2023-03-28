@@ -174,5 +174,19 @@ def get_author(author_id):
 
     return {"data": author}
 
+@app.route('/manga/cover/<string:cover_art_id>')
+def get_cover(cover_art_id):
+    url = f"https://api.mangadex.org/cover/{cover_art_id}"
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    cover_art_data = json.loads(data)
+
+    fileName = cover_art_data["data"]["attributes"]["fileName"]
+
+    cover_art={"fileName": fileName}
+
+    return {"data": cover_art}
+
 if __name__ == '__main__':
     app.run(debug=True)
