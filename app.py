@@ -194,43 +194,43 @@ def get_mangas():
 
 #     return {"data": manga}
 
-# @app.route('/manga/<string:manga_id>/chapters')
-# def get_chapter(manga_id):
-#     url = f"https://api.mangadex.org/manga/{manga_id}/aggregate"
+@app.route('/manga/<string:manga_id>/chapters')
+def get_chapter(manga_id):
+    url = f"https://api.mangadex.org/manga/{manga_id}/aggregate"
 
-#     response = urllib.request.urlopen(url)
-#     data = response.read()
-#     manga_data = json.loads(data)
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    manga_data = json.loads(data)
 
-#     volumes = manga_data["volumes"]
-#     manga = []
-#     for volume in volumes.values():
-#         volume_number = volume["volume"]
-#         for chapter in volume["chapters"].values():
-#             chapter_number = chapter["chapter"]
-#             chapter_id = chapter["id"]
-#             manga.append({"volume": volume_number, "chapter": chapter_number, "id": chapter_id})
+    volumes = manga_data["volumes"]
+    manga = []
+    for volume in volumes.values():
+        volume_number = volume["volume"]
+        for chapter in volume["chapters"].values():
+            chapter_number = chapter["chapter"]
+            chapter_id = chapter["id"]
+            manga.append({"volume": volume_number, "chapter": chapter_number, "id": chapter_id})
 
-#     return {"data": manga}
-
-
-# @app.route('/manga/chapter/detail/<string:chapter_id>')
-# def get_chapter_detail(chapter_id):
-#     url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
-
-#     response = urllib.request.urlopen(url)
-#     data = response.read()
-#     chapter_data = json.loads(data)
-
-#     baseUrl = chapter_data["baseUrl"]
-#     hash = chapter_data["chapter"]["hash"]
-#     chapterData = chapter_data["chapter"]["data"]
-#     dataSaver = chapter_data["chapter"]["dataSaver"]
-
-#     chapter={"baseUrl": baseUrl, "hash":hash, "chapterData": chapterData, "dataSaver": dataSaver}
+    return {"data": manga}
 
 
-#     return {"data": chapter}
+@app.route('/manga/chapter/detail/<string:chapter_id>')
+def get_chapter_detail(chapter_id):
+    url = f"https://api.mangadex.org/at-home/server/{chapter_id}"
+
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    chapter_data = json.loads(data)
+
+    baseUrl = chapter_data["baseUrl"]
+    hash = chapter_data["chapter"]["hash"]
+    chapterData = chapter_data["chapter"]["data"]
+    dataSaver = chapter_data["chapter"]["dataSaver"]
+
+    chapter={"baseUrl": baseUrl, "hash":hash, "chapterData": chapterData, "dataSaver": dataSaver}
+
+
+    return {"data": chapter}
 
 # @app.route('/manga/author/<string:author_id>')
 # def get_author(author_id):
