@@ -85,6 +85,15 @@ def get_mangas():
             author_dict = json.loads(author_data)
             author_name = author_dict["data"]["attributes"]["name"]
         
+        # Get the fileName from the cover_art_url
+        cover_art_response = urllib.request.urlopen(cover_art_url)
+        cover_art_data = cover_art_response.read()
+        cover_art_dict = json.loads(cover_art_data)
+        fileName = cover_art_dict["data"]["attributes"]["fileName"]
+        
+        # Call get_manga_cover() and pass the fileName parameter
+        cover_url = get_manga_cover(fileName, id)
+        
         mangas.append({
             "id": id,
             "title": title,
@@ -100,11 +109,12 @@ def get_mangas():
             "relationships": relationships,
             "relationshipId": relationshipId,
             "relationshipType": relationshipType,
-            "cover_art_url": cover_art_url,
+            "cover_url": cover_url,
             "author_name": author_name
         })
 
     return {"data": mangas}
+
 
 
 # @app.route('/mangalist')
@@ -260,11 +270,11 @@ def get_chapter_detail(chapter_id):
 
 #     return {"data": cover_art}
 
-# @app.route('/manga/<string:manga_id>/cover/<string:fileName>')
-# def get_manga_cover(fileName, manga_id):
-#     url = f"https://uploads.mangadex.org/covers/{manga_id}/{fileName}"
+@app.route('/manga/<string:manga_id>/cover/<string:fileName>')
+def get_manga_cover(fileName, id):
+    url = f"https://uploads.mangadex.org/covers/{id}/{fileName}"
 
-#     return url
+    return url
 
 if __name__ == '__main__':
     app.run(debug=True)
