@@ -26,14 +26,14 @@ api.add_resource(user.UserDetailComments, '/users/comments/<int:user_id>')
 api.add_resource(user_manga_list.User_Manga_Lists, '/user_manga_lists')
 api.add_resource(user_manga_list.User_Manga_List_Detail, '/user_manga_lists/<int:user_manga_list_id>')
 api.add_resource(user_manga_list.UserMangaListByUserId, '/user_manga_lists/user/<int:user_id>')
-api.add_resource(user_manga_list.UserMangaListByMangaId, '/user_manga_lists/manga/<int:manga_id>')
-api.add_resource(user_manga_list.UserMangaListByUserIdMangaId, '/user_manga_lists/user/<int:user_id>/manga/<int:manga_id>')
+api.add_resource(user_manga_list.UserMangaListByMangaId, '/user_manga_lists/manga/<string:manga_id>')
+api.add_resource(user_manga_list.UserMangaListByUserIdMangaId, '/user_manga_lists/user/<int:user_id>/manga/<string:manga_id>')
 
 api.add_resource(comment.Comments, '/comments')
 api.add_resource(comment.CommentDetail, '/comments/<int:comment_id>')
 api.add_resource(comment.CommentByUserId, '/comments/user/<int:user_id>')
-api.add_resource(comment.CommentByMangaId, '/comments/manga/<int:manga_id>')
-api.add_resource(comment.CommentByUserIdMangaId, '/comments/user/<int:user_id>/manga/<int:manga_id>')
+api.add_resource(comment.CommentByMangaId, '/comments/manga/<string:manga_id>')
+api.add_resource(comment.CommentByUserIdMangaId, '/comments/user/<int:user_id>/manga/<string:manga_id>')
 
 @app.route('/mangalist')
 def get_mangas():
@@ -50,7 +50,11 @@ def get_mangas():
         # except KeyError:
         #     description_english = "No English Description Available"
         manga_id = manga ["id"]
-        title = manga["attributes"]["title"]["en"]
+        try:
+            title = manga["attributes"]["title"]["en"]
+        except KeyError:
+            title = "No English Title Available"
+
         # try:
         #     link_to_raw = manga["attributes"]["links"]["raw"]
         # except KeyError:
@@ -167,8 +171,14 @@ def get_manga(manga_id):
     data = response.read()
     dict = json.loads(data)
     manga_id= dict["data"]["id"]
-    title = dict["data"]["attributes"]["title"]["en"]
-    description = dict["data"]["attributes"]["description"]["en"]
+    try:
+        title = dict["data"]["attributes"]["title"]["en"]
+    except KeyError:
+        title = "No English Title Available"
+    try:
+        description = dict["data"]["attributes"]["description"]["en"]
+    except KeyError:
+        description = "No English Description Available"
     # linkToRaw = dict["data"]["attributes"]["links"]["raw"]
     publication_demographic = dict["data"]["attributes"]["publicationDemographic"]
     status = dict["data"]["attributes"]["status"]

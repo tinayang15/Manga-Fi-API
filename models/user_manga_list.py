@@ -7,7 +7,7 @@ class User_Manga_List(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    manga_id=db.Column(db.Integer
+    manga_id=db.Column(db.String(255)
                     #    , db.ForeignKey('manga.id', nullable=False)
                     )
     favorite_list=db.Column(db.ARRAY(db.String))

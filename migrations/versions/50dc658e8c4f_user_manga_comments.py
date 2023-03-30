@@ -1,8 +1,8 @@
-"""user_manga_comment
+"""user_manga_comments
 
-Revision ID: 1a2b04be11b1
+Revision ID: 50dc658e8c4f
 Revises: 
-Create Date: 2023-03-25 15:54:45.646147
+Create Date: 2023-03-30 11:54:30.360873
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '1a2b04be11b1'
+revision = '50dc658e8c4f'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -32,7 +32,7 @@ def upgrade():
     op.create_table('comments',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('manga_id', sa.Integer(), nullable=True),
+    sa.Column('manga_id', sa.String(length=255), nullable=True),
     sa.Column('content', sa.String(), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),
@@ -42,7 +42,7 @@ def upgrade():
     op.create_table('user_manga_lists',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
-    sa.Column('manga_id', sa.Integer(), nullable=True),
+    sa.Column('manga_id', sa.String(length=255), nullable=True),
     sa.Column('favorite_list', sa.ARRAY(sa.String()), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=False),
     sa.Column('updated_at', sa.DateTime(), nullable=False),

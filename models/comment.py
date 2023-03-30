@@ -6,7 +6,7 @@ class Comment(db.Model):
     __tablename__='comments'
     id = db.Column(db.Integer, primary_key=True)
     user_id=db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    manga_id=db.Column(db.Integer
+    manga_id=db.Column(db.String(255)
                     #    , db.ForeignKey('manga.id', nullable=False)
                     )
     content=db.Column(db.String)
