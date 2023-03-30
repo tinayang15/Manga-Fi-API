@@ -223,8 +223,9 @@ def get_manga(manga_id):
     file_name = cover_art_dict["data"]["attributes"]["fileName"]
     
     cover_url = get_manga_cover(file_name, manga_id)
+    chapters = get_chapter(manga_id)
 
-    manga = {"id": manga_id, "title": title, "description": description, "publication_demographic": publication_demographic, "status": status, "year": year, "tags": tags, "state": state, "created_at": created_at, "updated_at": updated_at, "relationships": relationships, "relationship_id": relationship_id, "relationship_type": relationship_type, "author_id":author_id, "author_name": author_name,"cover_art_id":cover_art_id, "cover_url":cover_url, "artist_id":artist_id}
+    manga = {"id": manga_id, "title": title, "description": description, "publication_demographic": publication_demographic, "status": status, "year": year, "tags": tags, "state": state, "created_at": created_at, "updated_at": updated_at, "relationships": relationships, "relationship_id": relationship_id, "relationship_type": relationship_type, "author_id":author_id, "author_name": author_name,"cover_art_id":cover_art_id, "cover_url":cover_url, "artist_id":artist_id, "chapters":chapters}
 
     return {"data": manga}
 
