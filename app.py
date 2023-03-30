@@ -45,26 +45,26 @@ def get_mangas():
 
     mangas = []
     for manga in dict["data"]:
-        try:
-            descriptionEnglish = manga["attributes"]["description"]["en"]
-        except KeyError:
-            descriptionEnglish = "No English Description Available"
-        id = manga ["id"]
+        # try:
+        #     description_english = manga["attributes"]["description"]["en"]
+        # except KeyError:
+        #     description_english = "No English Description Available"
+        manga_id = manga ["id"]
         title = manga["attributes"]["title"]["en"]
-        try:
-            linkToRaw = manga["attributes"]["links"]["raw"]
-        except KeyError:
-            linkToRaw = "No Raw Links Found"
-        publicationDemographic = manga["attributes"]["publicationDemographic"]
-        status = manga["attributes"]["status"]
-        year = manga["attributes"]["year"]
+        # try:
+        #     link_to_raw = manga["attributes"]["links"]["raw"]
+        # except KeyError:
+        #     link_to_raw = "No Raw Links Found"
+        # publication_demographic = manga["attributes"]["publicationDemographic"]
+        # status = manga["attributes"]["status"]
+        # year = manga["attributes"]["year"]
         tags = [tag["attributes"]["name"]["en"] for tag in manga["attributes"]["tags"]]
-        state = manga["attributes"]["state"]
-        createdAt = manga["attributes"]["createdAt"]
-        updatedAt = manga["attributes"]["updatedAt"]
+        # state = manga["attributes"]["state"]
+        # created_at = manga["attributes"]["createdAt"]
+        # updated_at = manga["attributes"]["updatedAt"]
         relationships = manga["relationships"]
-        relationshipId = manga["relationships"][0]["id"]
-        relationshipType = manga["relationships"][0]["type"]
+        relationship_id = manga["relationships"][0]["id"]
+        relationship_type = manga["relationships"][0]["type"]
         cover_art_id = ""
         for relationship in manga["relationships"]:
             if relationship["type"] == "cover_art":
@@ -85,30 +85,28 @@ def get_mangas():
             author_dict = json.loads(author_data)
             author_name = author_dict["data"]["attributes"]["name"]
         
-        # Get the fileName from the cover_art_url
         cover_art_response = urllib.request.urlopen(cover_art_url)
         cover_art_data = cover_art_response.read()
         cover_art_dict = json.loads(cover_art_data)
-        fileName = cover_art_dict["data"]["attributes"]["fileName"]
+        file_name = cover_art_dict["data"]["attributes"]["fileName"]
         
-        # Call get_manga_cover() and pass the fileName parameter
-        cover_url = get_manga_cover(fileName, id)
+        cover_url = get_manga_cover(file_name, manga_id)
         
         mangas.append({
-            "id": id,
+            "manga_id": manga_id,
             "title": title,
-            "descriptionEnglish": descriptionEnglish,
-            "linkToRaw": linkToRaw,
-            "publicationDemographic": publicationDemographic,
-            "status": status,
-            "year": year,
+            # "description_english": description_english,
+            # "link_to_raw": link_to_raw,
+            # "publication_demographic": publication_demographic,
+            # "status": status,
+            # "year": year,
             "tags": tags,
-            "state": state,
-            "createdAt": createdAt,
-            "updatedAt": updatedAt,
+            # "state": state,
+            # "created_at": created_at,
+            # "updated_at": updated_at,
             "relationships": relationships,
-            "relationshipId": relationshipId,
-            "relationshipType": relationshipType,
+            "relationship_id": relationship_id,
+            "relationship_type": relationship_type,
             "cover_url": cover_url,
             "author_name": author_name
         })
@@ -161,48 +159,74 @@ def get_mangas():
 #     return {"data": mangas}
 
 
-# @app.route('/manga/<string:manga_id>')
-# def get_manga(manga_id):
-#     url = f"https://api.mangadex.org/manga/{manga_id}"
+@app.route('/manga/<string:manga_id>')
+def get_manga(manga_id):
+    url = f"https://api.mangadex.org/manga/{manga_id}"
 
-#     response = urllib.request.urlopen(url)
-#     data = response.read()
-#     dict = json.loads(data)
+    response = urllib.request.urlopen(url)
+    data = response.read()
+    dict = json.loads(data)
+    manga_id= dict["data"]["id"]
+    title = dict["data"]["attributes"]["title"]["en"]
+    description = dict["data"]["attributes"]["description"]["en"]
+    # linkToRaw = dict["data"]["attributes"]["links"]["raw"]
+    publication_demographic = dict["data"]["attributes"]["publicationDemographic"]
+    status = dict["data"]["attributes"]["status"]
+    year = dict["data"]["attributes"]["year"]
+    tags = [tag["attributes"]["name"]["en"] for tag in dict["data"]["attributes"]["tags"]]
+    state = dict["data"]["attributes"]["state"]
+    created_at = dict["data"]["attributes"]["createdAt"]
+    updated_at = dict["data"]["attributes"]["updatedAt"]
+    relationships = []
+    for relationship in dict["data"]["relationships"]:
+        relationship_id = relationship['id']
+        relationship_type = relationship["type"]
+        relationship_dict={'id': relationship_id, "type": relationship_type}
+        relationships.append(relationship_dict) 
+    # author_id = ""
+    # for relationship in dict["data"]["relationships"]:
+    #     if relationship["type"] == "author":
+    #         author_id = relationship["id"]
+    # cover_art_id = ""
+    # for relationship in dict["data"]["relationships"]:
+    #     if relationship["type"] == "cover_art":
+    #         cover_art_id = relationship["id"]
+    artist_id = ""
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "artist":
+            artist_id = relationship["id"]
+    relationship_id = dict["data"]["relationships"][0]["id"]
+    relationship_type = dict["data"]["relationships"][0]["type"]
+    cover_art_id = ""
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "cover_art":
+            cover_art_id = relationship["id"]
+    cover_art_url = f"https://api.mangadex.org/cover/{cover_art_id}/"
 
-#     title = dict["data"]["attributes"]["title"]["en"]
-#     description = dict["data"]["attributes"]["description"]["en"]
-#     linkToRaw = dict["data"]["attributes"]["links"]["raw"]
-#     publicationDemographic = dict["data"]["attributes"]["publicationDemographic"]
-#     status = dict["data"]["attributes"]["status"]
-#     year = dict["data"]["attributes"]["year"]
-#     tags = [tag["attributes"]["name"]["en"] for tag in dict["data"]["attributes"]["tags"]]
-#     state = dict["data"]["attributes"]["state"]
-#     createdAt = dict["data"]["attributes"]["createdAt"]
-#     updatedAt = dict["data"]["attributes"]["updatedAt"]
-#     relationships = []
-#     for relationship in dict["data"]["relationships"]:
-#         relationship_id = relationship['id']
-#         relationship_type = relationship["type"]
-#         relationship_dict={'id': relationship_id, "type": relationship_type}
-#         relationships.append(relationship_dict) 
-#     author_id = ""
-#     for relationship in dict["data"]["relationships"]:
-#         if relationship["type"] == "author":
-#             author_id = relationship["id"]
-#     cover_art_id = ""
-#     for relationship in dict["data"]["relationships"]:
-#         if relationship["type"] == "cover_art":
-#             cover_art_id = relationship["id"]
-#     artist_id = ""
-#     for relationship in dict["data"]["relationships"]:
-#         if relationship["type"] == "artist":
-#             artist_id = relationship["id"]
-#     relationshipId = dict["data"]["relationships"][0]["id"]
-#     relationshipType = dict["data"]["relationships"][0]["type"]
+    author_id = None
+    for relationship in dict["data"]["relationships"]:
+        if relationship["type"] == "author":
+            author_id = relationship["id"]
+            break
 
-#     manga = {"id": manga_id, "title": title, "description": description, "linkToRaw": linkToRaw, "publicationDemographic": publicationDemographic, "status": status, "year": year, "tags": tags, "state": state, "createdAt": createdAt, "updatedAt": updatedAt, "relationships": relationships, "relationshipId": relationshipId, "relationshipType": relationshipType, "author_id":author_id, "cover_art_id": cover_art_id, "artist_id":artist_id}
+    author_name = None
+    if author_id:
+        author_url = f"https://api.mangadex.org/author/{author_id}"
+        author_response = urllib.request.urlopen(author_url)
+        author_data = author_response.read()
+        author_dict = json.loads(author_data)
+        author_name = author_dict["data"]["attributes"]["name"]
+    
+    cover_art_response = urllib.request.urlopen(cover_art_url)
+    cover_art_data = cover_art_response.read()
+    cover_art_dict = json.loads(cover_art_data)
+    file_name = cover_art_dict["data"]["attributes"]["fileName"]
+    
+    cover_url = get_manga_cover(file_name, manga_id)
 
-#     return {"data": manga}
+    manga = {"id": manga_id, "title": title, "description": description, "publication_demographic": publication_demographic, "status": status, "year": year, "tags": tags, "state": state, "created_at": created_at, "updated_at": updated_at, "relationships": relationships, "relationship_id": relationship_id, "relationship_type": relationship_type, "author_id":author_id, "author_name": author_name,"cover_art_id":cover_art_id, "cover_url":cover_url, "artist_id":artist_id}
+
+    return {"data": manga}
 
 @app.route('/manga/<string:manga_id>/chapters')
 def get_chapter(manga_id):
@@ -270,9 +294,9 @@ def get_chapter_detail(chapter_id):
 
 #     return {"data": cover_art}
 
-@app.route('/manga/<string:manga_id>/cover/<string:fileName>')
-def get_manga_cover(fileName, id):
-    url = f"https://uploads.mangadex.org/covers/{id}/{fileName}"
+@app.route('/manga/<string:manga_id>/cover/<string:file_name>')
+def get_manga_cover(file_name, manga_id):
+    url = f"https://uploads.mangadex.org/covers/{manga_id}/{file_name}"
 
     return url
 
