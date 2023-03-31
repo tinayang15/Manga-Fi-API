@@ -29,7 +29,7 @@ class CommentByMangaId(Resource):
     def get(self, manga_id):
         comments = Comment.find_by_manga_id(manga_id)
         if not comments:
-            return {'msg': 'comments not found'}, 404
+            return {'msg': 'comments not found'}, 204
         return [c.json() for c in comments], 200
     
 class CommentByUserIdMangaId(Resource):
