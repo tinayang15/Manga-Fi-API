@@ -24,6 +24,20 @@ class UserMangaListByUserId(Resource):
         if not user_manga_lists:
             return {'msg': 'user_manga_list not found'}, 404
         return [um.json() for um in user_manga_lists], 200
+    def put(self, user_id):
+        data = request.get_json()
+        user_manga_lists = User_Manga_List.find_by_user_id(user_id)
+        if not user_manga_lists:
+            return {'msg': 'user_manga_list not found'}, 404
+        for user_manga_list in user_manga_lists:
+            user_manga_list_id = user_manga_list.id
+            favorite_list = data.get('favorite_list')
+            if favorite_list:
+                user_manga_list.favorite_list = favorite_list
+                user_manga_list.updated_at = datetime.utcnow()
+                db.session.commit()
+        updated_user_manga_lists = User_Manga_List.find_by_user_id(user_id)
+        return [um.json() for um in updated_user_manga_lists], 200
     
 class UserMangaListByMangaId(Resource):
     def get(self, manga_id):
