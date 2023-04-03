@@ -22,7 +22,7 @@ class UserMangaListByUserId(Resource):
     def get(self, user_id):
         user_manga_lists = User_Manga_List.find_by_user_id(user_id)
         if not user_manga_lists:
-            return {'msg': 'user_manga_list not found'}, 404
+            return {'msg': 'user_manga_list not found'}, 204
         return [um.json() for um in user_manga_lists], 200
     def put(self, user_id):
         data = request.get_json()

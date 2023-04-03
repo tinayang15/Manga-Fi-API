@@ -182,10 +182,16 @@ def get_manga(manga_id):
     # linkToRaw = dict["data"]["attributes"]["links"]["raw"]
     publication_demographic = dict["data"]["attributes"]["publicationDemographic"]
     status = dict["data"]["attributes"]["status"]
-    year = dict["data"]["attributes"]["year"]
+    try:
+        year = dict["data"]["attributes"]["year"]
+    except KeyError:
+        year = "No year available"
     tags = [tag["attributes"]["name"]["en"] for tag in dict["data"]["attributes"]["tags"]]
     state = dict["data"]["attributes"]["state"]
-    created_at = dict["data"]["attributes"]["createdAt"]
+    try:
+        created_at = dict["data"]["attributes"]["createdAt"]
+    except KeyError:
+        created_at = "No year/date available"
     updated_at = dict["data"]["attributes"]["updatedAt"]
     relationships = []
     for relationship in dict["data"]["relationships"]:
