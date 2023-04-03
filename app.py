@@ -12,9 +12,18 @@ app = Flask(__name__)
 CORS(app)
 api = Api (app)
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost:5432/manga_fi"
-app.config['SQLALCHEMY_ECHO'] = True
+DATABASE_URL = os.getenv('DATABASE_URL')
+if DATABASE_URL:
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace(
+        "://", "ql://", 1)
+    app.config['SQLALCHEMY_ECHO'] = False
+    app.env = 'production'
+else:
+    app.debug = True
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost:5432/<Your Database Name>'
+    app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 migrate = Migrate(app,db)
@@ -318,4 +327,4 @@ def get_manga_cover(file_name, manga_id):
     return url
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run()
