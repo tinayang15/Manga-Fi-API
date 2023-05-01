@@ -13,11 +13,6 @@ from models.db import db
 from models import user, user_manga_list, comment
 from resources import user, user_manga_list, comment
 
-cloudinary.config(
-    cloud_name = "dfmp3faei",
-    api_key = "354349187816716",
-    api_secret = "G9heAJ8GXFQiUCbCLZsDmE8GnNk",
-)
 app = Flask(__name__)
 CORS(app)
 api = Api (app)
@@ -39,6 +34,11 @@ app.config['SQLALCHEMY_ECHO'] = True
 #     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost:5432/<Your Database Name>'
 #     app.config['SQLALCHEMY_ECHO'] = True
 
+cloudinary.config(
+    cloud_name = "dfmp3faei",
+    api_key = "354349187816716",
+    api_secret = "G9heAJ8GXFQiUCbCLZsDmE8GnNk",
+)
 db.init_app(app)
 migrate = Migrate(app,db)
 
@@ -341,7 +341,7 @@ def get_chapter_detail(chapter_id):
 #     return url
 
 @app.route('/manga-cover/<string:manga_id>/cover/<string:file_name>')
-def get_manga_cover(file_name):
+def get_manga_cover(file_name, manga_id):
     response = cloudinary.uploader.upload("https://uploads.mangadex.org/covers/{manga_id}/{file_name}".format(file_name))
 
     return jsonify({
