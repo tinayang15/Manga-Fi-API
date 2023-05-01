@@ -1,6 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 import urllib.request, json
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+from cloudinary.uploader import upload
+from cloudinary.utils import cloudinary_url
 from flask_restful import Api
 from flask_cors import CORS
 from flask_migrate import Migrate
@@ -8,22 +13,31 @@ from models.db import db
 from models import user, user_manga_list, comment
 from resources import user, user_manga_list, comment
 
+cloudinary.config(
+    cloud_name = "dfmp3faei",
+    api_key = "354349187816716",
+    api_secret = "G9heAJ8GXFQiUCbCLZsDmE8GnNk",
+)
 app = Flask(__name__)
 CORS(app)
 api = Api (app)
-
-DATABASE_URL = os.getenv('DATABASE_URL')
-if DATABASE_URL:
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace(
-        "://", "ql://", 1)
-    app.config['SQLALCHEMY_ECHO'] = False
-    app.env = 'production'
-else:
-    app.debug = True
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost:5432/<Your Database Name>'
-    app.config['SQLALCHEMY_ECHO'] = True
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#stops our database from tracking modifications of objects - everytime we make a change to our models, SQLAlchemy caches those changes can lead to high memory usage by our app.
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://localhost:5432/manga_fi"
+# what database to use
+app.config['SQLALCHEMY_ECHO'] = True
+# DATABASE_URL = os.getenv('DATABASE_URL')
+# if DATABASE_URL:
+#     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#     app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URL.replace(
+#         "://", "ql://", 1)
+#     app.config['SQLALCHEMY_ECHO'] = False
+#     app.env = 'production'
+# else:
+#     app.debug = True
+#     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+#     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost:5432/<Your Database Name>'
+#     app.config['SQLALCHEMY_ECHO'] = True
 
 db.init_app(app)
 migrate = Migrate(app,db)
@@ -320,11 +334,19 @@ def get_chapter_detail(chapter_id):
 
 #     return {"data": cover_art}
 
-@app.route('/manga/<string:manga_id>/cover/<string:file_name>')
-def get_manga_cover(file_name, manga_id):
-    url = f"https://uploads.mangadex.org/covers/{manga_id}/{file_name}"
+# @app.route('/manga/<string:manga_id>/cover/<string:file_name>')
+# def get_manga_cover(file_name, manga_id):
+#     url = f"https://uploads.mangadex.org/covers/{manga_id}/{file_name}"
 
-    return url
+#     return url
+
+@app.route('/manga-cover/<string:manga_id>/cover/<string:file_name>')
+def get_manga_cover(file_name):
+    response = cloudinary.uploader.upload("https://uploads.mangadex.org/covers/{manga_id}/{file_name}".format(file_name))
+
+    return jsonify({
+        "url": response["secure_url"]
+    })
 
 if __name__ == '__main__':
     app.run()
